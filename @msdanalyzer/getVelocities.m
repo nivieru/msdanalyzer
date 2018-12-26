@@ -40,6 +40,14 @@ for i = 1 : n_tracks
         % Subtract drift position to track position
         X = X - xdrift(index_in_drift_time, :);
         
+        % Subtract rotational drift
+        if ~isempty(obj.rot_drift)
+            theta_drift = obj.rot_drift(:,2);
+            meanX = obj.rot_drift(:,4:end);
+            dx = - theta_drift(index_in_drift_time).*(meanX(index_in_drift_time,2)-X(:,2));
+            dy = - theta_drift(index_in_drift_time).*(X(:,1)- meanX(index_in_drift_time,1));
+            X = X + [dx, dy];
+        end
     end
     
     dX = diff(X, 1) ./ repmat(diff(t), [1 obj.n_dim]);

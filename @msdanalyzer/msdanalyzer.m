@@ -43,6 +43,8 @@ classdef msdanalyzer
         loglogfit
         % Drift movement
         drift
+        % Rotational drift
+        rot_drift
     end
     
     properties (SetAccess = private, GetAccess = private, Hidden = true)

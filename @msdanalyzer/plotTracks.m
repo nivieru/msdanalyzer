@@ -66,6 +66,14 @@ if obj.n_dim == 2
             % Subtract drift position to track position
             x = x - xdrift(index_in_drift_time);
             y = y - ydrift(index_in_drift_time);
+            if ~isempty(obj.rot_drift)
+                theta_drift = obj.rot_drift(index_in_drift_time,2);
+                meanX = obj.rot_drift(index_in_drift_time,4:end);
+                dx = - theta_drift.*(meanX(:,2)-y);
+                dy = - theta_drift.*(x - meanX(:,1));
+                x = x + dx;
+                y = y + dy;
+            end
         end
         
         hps(i) =  plot(ha, x, y, ...

@@ -137,10 +137,78 @@ switch lower(method)
         ldrift = cumsum( sum_V ./ repmat(n_V, [1 obj.n_dim]) .* repmat(d_time, [1 obj.n_dim]), 1);
         obj.drift = [time ldrift];
         
+        case 'angvelocity'
+        
+        sum_V = zeros(n_times, obj.n_dim);
+        n_V = zeros(n_times, 1);
+        sum_X = zeros(n_times, obj.n_dim);
+        sum_Omega = zeros(n_times, 1);
+        sum_Vr = zeros(n_times, 1);
+        for i = 1 : n_tracks
+            
+            t = obj.tracks{i}(:,1);
+            t = msdanalyzer.roundn(t, msdanalyzer.TOLERANCE);
+            
+            % Determine target time index in bulk
+            [~, index_in_all_tracks_time, ~] = intersect(time, t);
+            
+            % Remove first element
+            index_in_all_tracks_time_X = index_in_all_tracks_time;
+            index_in_all_tracks_time(1) = [];
+            
+            % Compute speed
+            V = diff( obj.tracks{i}(:, 2:end) ) ./ repmat(diff(t), [ 1 obj.n_dim]);
+            X = obj.tracks{i}(:, 2:end);
+            % Add to mean accum for these indexes
+            n_V(index_in_all_tracks_time) = n_V(index_in_all_tracks_time) + 1;
+            sum_V(index_in_all_tracks_time, :) = sum_V(index_in_all_tracks_time, :) + V;
+            sum_X(index_in_all_tracks_time_X, :) = sum_X(index_in_all_tracks_time_X, :) + X;
+        end
+        
+        % Build accumulated drift
+        sum_V(1, :) = 0;
+        n_V(1, :) = 1;
+        % Integrate
+        d_time = [0; diff(time) ];
+        ldrift = cumsum( sum_V ./ repmat(n_V, [1 obj.n_dim]) .* repmat(d_time, [1 obj.n_dim]), 1);
+        obj.drift = [time ldrift];
+
+        meanX = sum_X./repmat(n_V, [1 obj.n_dim]);
+        for i = 1 : n_tracks
+            
+            t = obj.tracks{i}(:,1);
+            t = msdanalyzer.roundn(t, msdanalyzer.TOLERANCE);
+            
+            % Determine target time index in bulk
+            [~, index_in_all_tracks_time, ~] = intersect(time, t);
+            
+            % Remove first element
+            index_in_all_tracks_time(1) = [];
+            
+            % Compute remaining speed
+            Vrem = diff( obj.tracks{i}(:, 2:end) ) ./ repmat(diff(t), [ 1 obj.n_dim]) - sum_V(index_in_all_tracks_time,:) ./ repmat(n_V(index_in_all_tracks_time), [1 obj.n_dim]);
+            Xrem = obj.tracks{i}(2:end, 2:end) - meanX(index_in_all_tracks_time,:);
+            X = Xrem - diff( obj.tracks{i}(:, 2:end) )/2;
+            [Theta,R] = cart2pol(X(:,1),X(:,2));
+            VremTheta = dot(Vrem,[-X(:,2),X(:,1)],2)./R;
+            VremR = dot(Vrem,X,2)./R;
+            sum_Omega(index_in_all_tracks_time) = sum_Omega(index_in_all_tracks_time) + VremTheta./R;
+            sum_Vr(index_in_all_tracks_time) = sum_Vr(index_in_all_tracks_time) + VremR;
+            
+        end
+        % Build accumulated rotational drift
+        sum_Omega(1, :) = 0;
+        n_V(1, :) = 1;
+        % Integrate
+        d_time = [0; diff(time) ];
+        theta_drift = cumsum( sum_Omega ./ n_V .* d_time);
+        R_drift = cumsum( sum_Vr ./ n_V .* d_time);
+        obj.rot_drift = [time theta_drift R_drift meanX];
+
     case 'clear'
         
         obj.drift = [];
-        
+        obj.rot_drift = [];
         
     otherwise
         error('msdanalyzer:computeDriftCorrection:UnknownCorrectionMethod', ...

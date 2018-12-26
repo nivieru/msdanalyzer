@@ -35,6 +35,10 @@ obj.msd = cell(n_tracks, 1);
 if ~isempty(obj.drift)
     tdrift = obj.drift(:,1);
     xdrift = obj.drift(:, 2:end);
+        if ~isempty(obj.rot_drift)
+            theta_drift = obj.rot_drift(:,2);
+            meanX = obj.rot_drift(:,4:end);
+        end
 end
 
 fprintf('%5d/%5d', 0, n_tracks);
@@ -62,7 +66,11 @@ for i = 1 : n_tracks
         t = t(index_in_track_time);
         % Subtract drift position to track position
         X = X - xdrift(index_in_drift_time, :);
-        
+        if ~isempty(obj.rot_drift)
+            dx = - theta_drift(index_in_drift_time).*(meanX(index_in_drift_time,2)-X(:,2));
+            dy = - theta_drift(index_in_drift_time).*(X(:,1)- meanX(index_in_drift_time,1));
+            X = X + [dx, dy];
+        end 
     end
     
     
