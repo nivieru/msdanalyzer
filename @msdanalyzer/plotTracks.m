@@ -61,7 +61,7 @@ if obj.n_dim == 2
             tdrift = obj.drift(:,1);
             xdrift = obj.drift(:, 2);
             ydrift = obj.drift(:, 3);
-            t = track(:,1);
+            t = msdanalyzer.roundn(track(:,1),msdanalyzer.TOLERANCE);
             [~, index_in_drift_time, ~] = intersect(tdrift, t);
             % Subtract drift position to track position
             x = x - xdrift(index_in_drift_time);
