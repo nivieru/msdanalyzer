@@ -21,12 +21,15 @@ function msmsd = getMeanMSD(obj, indices)
 % msd = obj.getMeanMSD(indices) only takes into account the MSD
 % curves with the specified indices.
 
-if nargin < 2 || isempty(indices)
-    indices = 1 : numel(obj.msd); % Niv: switched order of checks so we don't use indices before it is defined. Is this  ssginment correct even if obj.msd_valid is false? need to check that
+if ~obj.msd_valid
+    if nargin < 2
+        indices = [];
+    end
+    obj = obj.computeMSD(indices);
 end
 
-if ~obj.msd_valid
-    obj = obj.computeMSD(indices);
+if nargin < 2 || isempty(indices)
+    indices = 1 : numel(obj.msd);
 end
 
 n_tracks = numel(indices);
