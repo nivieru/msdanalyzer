@@ -1,4 +1,4 @@
-function  varargout = fitMeanMSD(obj, clip_factor)
+function  varargout = fitMeanMSD(obj, indices, clip_factor)
 %%FITMEANMSD Fit the weighted averaged MSD by a linear function.
 %
 % obj.fitMeanMSD computes and fits the weighted mean MSD by a
@@ -6,7 +6,10 @@ function  varargout = fitMeanMSD(obj, clip_factor)
 % purely diffusive behavior. Fit results are displayed in the
 % command window.
 %
-% obj.fitMeanMSD(clip_factor) does the fit, taking into account
+% obj.fitMeanMSD(indices) only takes into account the MSD
+% curves with the specified indices. An empty indices vector specifies all indices.
+%
+% obj.fitMeanMSD(indices, clip_factor) does the fit, taking into account
 % only the first potion of the average MSD curve specified by
 % 'clip_factor' (a double between 0 and 1). If the value
 % exceeds 1, then the clip factor is understood to be the
@@ -16,8 +19,12 @@ function  varargout = fitMeanMSD(obj, clip_factor)
 % [fo, gof] = obj.fitMeanMSD(...) returns the fit object and the
 % goodness of fit.
 
-if nargin < 2
+if nargin < 3
     clip_factor = 0.25;
+end
+
+if nargin < 2
+    indices = [];
 end
 
 if ~obj.msd_valid
@@ -25,7 +32,7 @@ if ~obj.msd_valid
 end
 
 ft = fittype('poly1');
-mmsd = obj.getMeanMSD;
+mmsd = obj.getMeanMSD(indices);
 
 t = mmsd(:,1);
 y = mmsd(:,2);
