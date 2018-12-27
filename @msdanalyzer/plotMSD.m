@@ -60,7 +60,7 @@ for i = 1 : n_spots
     if errorbar
         s = msd_spot(:,3);
         hps(i) = msdanalyzer.errorShade(ha, t, m, s, colors(i,:), true);
-        set( hps(i), 'DisplayName', trackName );
+        set( hps(i).mainLine, 'DisplayName', trackName );
     else
         hps(i) = plot(ha, t, m, ...
             'Color', colors(i,:), ...
