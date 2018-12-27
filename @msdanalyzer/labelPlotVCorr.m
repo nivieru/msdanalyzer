@@ -16,7 +16,7 @@ if nargin < 2
 end
 
 hl = NaN(2, 1);
-hl(1) = xlabel(ha, ['Delay (' obj.time_units ')']);
+hl(1) = xlabel(ha, ['Time delay [' obj.time_units ']']);
 hl(2) = ylabel(ha, 'Normalized velocity autocorrelation');
 
 

@@ -18,10 +18,10 @@ if nargin < 2
 end
 
 hl = NaN(obj.n_dim, 1);
-hl(1) = xlabel(ha, ['X (' obj.space_units ')'] );
-hl(2) = ylabel(ha, ['Y (' obj.space_units ')'] );
+hl(1) = xlabel(ha, ['X [' obj.space_units ']'] );
+hl(2) = ylabel(ha, ['Y [' obj.space_units ']'] );
 if obj.n_dim ==3
-    hl(3) = zlabel(ha, ['Z (' obj.space_units ')'] );
+    hl(3) = zlabel(ha, ['Z [' obj.space_units ']'] );
 end
 axis equal
 if nargout > 0
