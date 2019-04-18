@@ -58,10 +58,10 @@ if obj.n_dim == 2
         y = track(:,3);
         
         if corrected && ~isempty(obj.drift)
-            tdrift = obj.drift(:,1);
+            tdrift = obj.roundTimes(obj.drift(:,1));
             xdrift = obj.drift(:, 2);
             ydrift = obj.drift(:, 3);
-            t = msdanalyzer.roundn(track(:,1),msdanalyzer.TOLERANCE);
+            t = obj.roundTimes(track(:,1));
             [~, index_in_drift_time, ~] = intersect(tdrift, t);
             % Subtract drift position to track position
             x = x - xdrift(index_in_drift_time);
@@ -95,11 +95,11 @@ else
         z = track(:,4);
         
         if corrected && ~isempty(obj.drift)
-            tdrift = obj.drift(:,1);
+            tdrift = obj.roundTimes(obj.drift(:,1));
             xdrift = obj.drift(:, 2);
             ydrift = obj.drift(:, 3);
             zdrift = obj.drift(:, 4);
-            t = track(:,1);
+            t = obj.roundTimes(track(:,1));
             [~, index_in_drift_time, ~] = intersect(tdrift, t);
             % Subtract drift position to track position
             x = x - xdrift(index_in_drift_time);

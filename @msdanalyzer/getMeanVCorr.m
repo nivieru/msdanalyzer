@@ -36,7 +36,7 @@ n_tracks = numel(indices);
 all_delays = cell(n_tracks, 1);
 for i = 1 : n_tracks
     index = indices(i);
-    all_delays{i} = obj.vcorr{index}(:,1);
+    all_delays{i} = obj.roundTimes(obj.vcorr{index}(:,1));
 end
 delays = unique( vertcat( all_delays{:} ) );
 n_delays = numel(delays);
@@ -51,7 +51,7 @@ for i = 1 : n_tracks
     
     index = indices(i);
     
-    t = obj.vcorr{index}(:,1);
+    t = obj.roundTimes(obj.vcorr{index}(:,1));
     m = obj.vcorr{index}(:,2);
     n = obj.vcorr{index}(:,4);
     
@@ -80,7 +80,7 @@ for i = 1 : n_tracks
     
     index = indices(i);
     
-    t = obj.vcorr{index}(:,1);
+    t = obj.roundTimes(obj.vcorr{index}(:,1));
     m = obj.vcorr{index}(:,2);
     n = obj.vcorr{index}(:,4);
     

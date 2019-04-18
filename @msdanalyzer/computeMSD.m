@@ -33,7 +33,7 @@ n_delays = numel(delays);
 
 obj.msd = cell(n_tracks, 1);
 if ~isempty(obj.drift)
-    tdrift = obj.drift(:,1);
+    tdrift = obj.roundTimes(obj.drift(:,1));
     xdrift = obj.drift(:, 2:end);
         if ~isempty(obj.rot_drift)
             theta_drift = obj.rot_drift(:,2);
@@ -54,7 +54,7 @@ for i = 1 : n_tracks
     index = indices(i);
     track = obj.tracks{index};
     t = track(:,1);
-    t = msdanalyzer.roundn(t, msdanalyzer.TOLERANCE);
+    t = obj.roundTimes(t);
     X = track(:, 2:end);
     
     % Determine drift correction
@@ -80,7 +80,7 @@ for i = 1 : n_tracks
         
         % Delay in physical units
         dt = t(j+1:end) - t(j);
-        dt = msdanalyzer.roundn(dt, msdanalyzer.TOLERANCE);
+        dt = obj.roundTimes(dt);
         
         % Determine target delay index in bulk
         n_dt = numel( dt );

@@ -89,7 +89,7 @@ switch lower(method)
         for i = 1 : n_tracks
             
             t = obj.tracks{i}(:,1);
-            t = msdanalyzer.roundn(t, msdanalyzer.TOLERANCE);
+            t = obj.roundTimes(t);
             
             % Determine target time index in bulk
             [~, index_in_all_tracks_time, ~] = intersect(time, t);
@@ -112,7 +112,7 @@ switch lower(method)
         for i = 1 : n_tracks
             
             t = obj.tracks{i}(:,1);
-            t = msdanalyzer.roundn(t, msdanalyzer.TOLERANCE);
+            t = obj.roundTimes(t);
             
             % Determine target time index in bulk
             [~, index_in_all_tracks_time, ~] = intersect(time, t);
@@ -147,7 +147,7 @@ switch lower(method)
         for i = 1 : n_tracks
             
             t = obj.tracks{i}(:,1);
-            t = msdanalyzer.roundn(t, msdanalyzer.TOLERANCE);
+            t = obj.roundTimes(t);
             
             % Determine target time index in bulk
             [~, index_in_all_tracks_time, ~] = intersect(time, t);
@@ -177,7 +177,7 @@ switch lower(method)
         for i = 1 : n_tracks
             
             t = obj.tracks{i}(:,1);
-            t = msdanalyzer.roundn(t, msdanalyzer.TOLERANCE);
+            t = obj.roundTimes(t);
             
             % Determine target time index in bulk
             [~, index_in_all_tracks_time, ~] = intersect(time, t);

@@ -25,12 +25,12 @@ for i = 1 : n_tracks
     
     index = indices(i);
     
-    t = obj.tracks{index}(:, 1);
+    t = obj.roundTimes(obj.tracks{index}(:, 1));
     X = obj.tracks{index}(:, 2:end);
     
     % Determine drift correction
     if ~isempty(obj.drift)
-        tdrift = obj.drift(:, 1);
+        tdrift = obj.roundTimes(obj.drift(:, 1));
         xdrift = obj.drift(:, 2:end);
         % Determine target delay index in bulk
         [~, index_in_drift_time, index_in_track_time] = intersect(tdrift, t);

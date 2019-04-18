@@ -21,7 +21,7 @@ classdef msdanalyzer
         % Tolerance for binning delays together. Two delays will be binned
         % together if they differ in absolute value by less than
         % 10^-TOLERANCE.
-        TOLERANCE = 12;
+        TOLERANCE = 5;
     end
     
     properties (SetAccess = private)
@@ -33,6 +33,8 @@ classdef msdanalyzer
         space_units;
         % Time units
         time_units
+        % time seperations between frames
+        time_sep
         % Stores the MSD
         msd
         % Stores the velocty correlation
@@ -59,13 +61,16 @@ classdef msdanalyzer
     %% Constructor
     methods
         
-        function obj = msdanalyzer(n_dim, space_units, time_units)
+        function obj = msdanalyzer(n_dim, space_units, time_units, time_sep)
             %%MSDANALYZER Builds a new MSD analyzer object.
             % obj = MSDANALYZER(dimensionality, space__units, time_units)
             % builds a new empty msdanalyzer object with the specified
             % dimensionality (2 for 2D, 3 for 3D, etc...), spatial units
             % and time units. Units are strings, used only for display and
             % plotting.
+            % time_sep (optional) - round all times and time delays to
+            % whole multiples of time_sep. Omit or set to a non-positive
+            % value to round to according to TOLERANCE instead.
             
             if ~isreal(n_dim) || ~isscalar(n_dim) || n_dim < 1 || ~(n_dim == floor(double(n_dim)))
                 error('msdanalyzer:BadDimensionality', ...
@@ -75,6 +80,11 @@ classdef msdanalyzer
             obj.n_dim = n_dim;
             obj.space_units = space_units;
             obj.time_units = time_units;
+            if exist('time_sep', 'var')
+                obj.time_sep = time_sep;
+            else
+                obj.time_sep = -1;
+            end
         end
     end
     
@@ -124,11 +134,15 @@ classdef msdanalyzer
         %
         %   See also ROUND
         % Jean-Yves Tinevez - MPI-CBG - August 2007
-        
+
         function Y = roundn(X,N)
             Y = 10^(-N) .* round(X.*10^(N));
         end
         
+        function Y = roundSep(X,sep)
+            Y = sep .* round(X./sep);
+        end
+
         function newobj = pool(msda_arr)
             %%POOL Pool the data of several masanalyzer objects in a new one.
             

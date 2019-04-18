@@ -42,7 +42,7 @@ for i = 1 : n_tracks
     if isempty( obj.msd{index} )
         continue
     end
-    all_delays{i} = obj.msd{index}(:,1);
+    all_delays{i} = obj.roundTimes(obj.msd{index}(:,1));
 end
 delays = unique( vertcat( all_delays{:} ) );
 n_delays = numel(delays);
@@ -59,7 +59,7 @@ for i = 1 : n_tracks
         continue
     end
     
-    t = obj.msd{index}(:,1);
+    t = obj.roundTimes(obj.msd{index}(:,1));
     m = obj.msd{index}(:,2);
     n = obj.msd{index}(:,4);
     
@@ -91,7 +91,7 @@ for i = 1 : n_tracks
         continue
     end
     
-    t = obj.msd{index}(:,1);
+    t = obj.roundTimes(obj.msd{index}(:,1));
     m = obj.msd{index}(:,2);
     n = obj.msd{index}(:,4);
     

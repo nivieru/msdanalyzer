@@ -54,7 +54,7 @@ for i = 1 : n_tracks
         
         % Delay in physical units
         dt = t(j+1:end) - t(j);
-        dt = msdanalyzer.roundn(dt, msdanalyzer.TOLERANCE);
+        dt = obj.roundTimes(dt);
         
         % Determine target delay index in bulk
         [~, index_in_all_delays, ~] = intersect(delays, dt);
