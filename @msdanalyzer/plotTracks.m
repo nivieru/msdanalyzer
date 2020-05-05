@@ -44,7 +44,7 @@ n_tracks = numel(indices);
 colors = jet(n_tracks);
 
 hold(ha, 'on');
-hps = NaN(n_tracks, 1);
+% hps = NaN(n_tracks, 1);
 
 if obj.n_dim == 2
     % 2D case
