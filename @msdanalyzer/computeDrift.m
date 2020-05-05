@@ -62,13 +62,13 @@ switch lower(method)
                 'Drift must be of size N x (nDim+1) with [ T0 X0 Y0 ... ] etc...');
         end
         
-        uninterpolated_time = msdanalyzer.roundn( extra(:, 1) , msdanalyzer.TOLERANCE);
+        uninterpolated_time = obj.roundTimes( extra(:, 1));
         uninterpolated_drift = extra(:, 2:end);
         
-        mit1 = msdanalyzer.roundn( min(uninterpolated_time), msdanalyzer.TOLERANCE);
-        mt1 = msdanalyzer.roundn( min(time), msdanalyzer.TOLERANCE);
-        mit2 = msdanalyzer.roundn( max(uninterpolated_time), msdanalyzer.TOLERANCE);
-        mt2 = msdanalyzer.roundn( max(time), msdanalyzer.TOLERANCE);
+        mit1 = obj.roundTimes( min(uninterpolated_time));
+        mt1 = obj.roundTimes( min(time));
+        mit2 = obj.roundTimes( max(uninterpolated_time));
+        mt2 = obj.roundTimes( max(time));
         
         if  mit1 > mt1 || mit2 < mt2
             error('msdanalyzer:computeDrift:BadTimeVector', ...
