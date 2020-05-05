@@ -68,8 +68,8 @@ classdef msdanalyzer
             % dimensionality (2 for 2D, 3 for 3D, etc...), spatial units
             % and time units. Units are strings, used only for display and
             % plotting.
-            % time_sep (optional) - round all times and time delays to
-            % whole multiples of time_sep. Omit or set to a non-positive
+            % time_sep (optional, defult []) - round all times and time delays to
+            % whole multiples of time_sep. Omit or set to an empty or non-positive
             % value to round to according to TOLERANCE instead.
             
             if ~isreal(n_dim) || ~isscalar(n_dim) || n_dim < 1 || ~(n_dim == floor(double(n_dim)))
@@ -83,7 +83,7 @@ classdef msdanalyzer
             if exist('time_sep', 'var')
                 obj.time_sep = time_sep;
             else
-                obj.time_sep = -1;
+                obj.time_sep = [];
             end
         end
     end
