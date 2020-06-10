@@ -29,13 +29,22 @@ if ~obj.msd_valid
     obj = obj.computeMSD;
 end
 n_spots = numel(obj.msd);
-
-if clip_factor < 1
-    fprintf('Fitting %d curves of MSD = f(t), taking only the first %d%% of each curve... ',...
-        n_spots, ceil(100 * clip_factor) )
+if length(clip_factor) == 1
+    if clip_factor < 1
+        fprintf('Fitting %d curves of MSD = f(t), taking only the first %d%% of each curve... ',...
+            n_spots, ceil(100 * clip_factor) )
+    else
+        fprintf('Fitting %d curves of MSD = f(t), taking only the first %d points of each curve... ',...
+            n_spots, round(clip_factor) )
+    end
 else
-    fprintf('Fitting %d curves of MSD = f(t), taking only the first %d points of each curve... ',...
-        n_spots, round(clip_factor) )
+    if clip_factor(2) < 1
+        fprintf('Fitting %d curves of MSD = f(t), taking only from region %d%%-%d%% of each curve... ',...
+            n_spots, ceil(100 * clip_factor) )
+    else
+        fprintf('Fitting %d curves of MSD = f(t), taking only points %d-%d of each curve... ',...
+            n_spots, round(clip_factor) )
+    end
 end
 
 a = NaN(n_spots, 1);
@@ -55,10 +64,18 @@ for i_spot = 1 : n_spots
     w = msd_spot(:,4);
     
     % Clip data, never take the first one dt = 0
-    if clip_factor < 1
-        t_limit = 2 : round(numel(t) * clip_factor);
+    if length(clip_factor) > 1
+        if clip_factor(2) < 1
+            t_limit = max(2, round(numel(t) * clip_factor(1))) : round(numel(t) * clip_factor(2));
+        else
+            t_limit = max(2, 1 + clip_factor(1)) : min(1+round(clip_factor(2)), numel(t));
+        end
     else
-        t_limit = 2 : min(1+round(clip_factor), numel(t));
+        if clip_factor < 1
+            t_limit = 2 : round(numel(t) * clip_factor);
+        else
+            t_limit = 2 : min(1+round(clip_factor), numel(t));
+        end
     end
     t = t(t_limit);
     y = y(t_limit);

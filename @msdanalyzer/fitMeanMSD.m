@@ -45,7 +45,7 @@ if length(clip_factor) > 1
     if clip_factor(2) < 1
         t_limit = max(2, round(numel(t) * clip_factor(1))) : round(numel(t) * clip_factor(2));
     else
-        t_limit = max(2, 1 + clip_factor(1)) : min(1+round(clip_factor), numel(t));
+        t_limit = max(2, 1 + clip_factor(1)) : min(1+round(clip_factor(2)), numel(t));
     end
 else
     if clip_factor < 1
