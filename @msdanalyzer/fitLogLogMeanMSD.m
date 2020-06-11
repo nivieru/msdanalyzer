@@ -1,4 +1,4 @@
-function  varargout = fitLogLogMeanMSD(obj, indices, clip_factor)
+function  [varargout] = fitLogLogMeanMSD(obj, indices, clip_factor)
 %%FITMEANMSD Fit the weighted averaged MSD by a linear function.
 %
 % obj.fitMeanMSD computes and fits the weighted mean MSD by a
@@ -54,9 +54,12 @@ else
         t_limit = 2 : min(1+round(clip_factor), numel(t));
     end
 end
+fprintf('t_limit: %d - %d\n', t_limit([1,end]));
 t = t(t_limit);
 y = y(t_limit);
 w = w(t_limit);
+
+fprintf('t: %f - %f\n', t([1,end]));
 
 [fo, gof] = fit(log(t), log(y), ft, 'Weights', w);
 
@@ -72,7 +75,9 @@ if nargout > 0
     varargout{1} = fo;
     if nargout > 1
         varargout{2} = gof;
+        if nargout > 2
+            varargout{3} = t;
+        end
     end
 end
-
 end

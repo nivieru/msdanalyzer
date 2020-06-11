@@ -1,4 +1,4 @@
-function  varargout = fitMeanMSD(obj, indices, clip_factor)
+function  [varargout] = fitMeanMSD(obj, indices, clip_factor)
 %%FITMEANMSD Fit the weighted averaged MSD by a linear function.
 %
 % obj.fitMeanMSD computes and fits the weighted mean MSD by a
@@ -11,7 +11,7 @@ function  varargout = fitMeanMSD(obj, indices, clip_factor)
 %
 % obj.fitMeanMSD(indices, clip_factor) does the fit, taking into account
 % only the potion of the average MSD curve specified by 'clip_factor'.
-% clip_factor can be a single elemnt specifying the end of the portion, 
+% clip_factor can be a single elemnt specifying the end of the portion,
 % or a two element vector [begin end], specifying also the start of the portion.
 % if the values of clip_factor are doubles between 0 and 1 they are taken as a
 % fraction of the curve length. If the values exceed 1, then the clip factor is understood
@@ -54,9 +54,13 @@ else
         t_limit = 2 : min(1+round(clip_factor), numel(t));
     end
 end
+fprintf('t_limit: %d - %d\n', t_limit([1,end]));
+
 t = t(t_limit);
 y = y(t_limit);
 w = w(t_limit);
+
+fprintf('t: %f - %f\n', t([1,end]));
 
 [fo, gof] = fit(t, y, ft, 'Weights', w);
 
@@ -72,6 +76,9 @@ if nargout > 0
     varargout{1} = fo;
     if nargout > 1
         varargout{2} = gof;
+        if nargout > 2
+            varargout{3} = t;
+        end
     end
 end
 
