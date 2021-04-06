@@ -36,6 +36,10 @@ function obj = computeDrift(obj, method, extra, interpmethod)
 % is due to the drift. This method is more robust than the
 % 'centroid' method against particle disappearance and appearance.
 %
+% 'angvelocity' works similar to 'velocity', but additionally computes and
+% averages angular velocities around the center of mass, assuming
+% solid-body-like rotation.
+
 % Results are stored in the 'drift' field of the returned object.
 % It is a double array of size N x (nDim+1) (nDim being the problem
 % dimensionality), and must be arranged as following: [ Ti Xi Yi ... ]
